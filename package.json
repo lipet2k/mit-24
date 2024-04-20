@@ -33,6 +33,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"bitcoin-qr": "^1.1.2"
+		"@nomicfoundation/hardhat-toolbox": "^5.0.0",
+		"bitcoin-qr": "^1.1.2",
+		"chart.js": "^4.4.2",
+		"dotenv": "^16.4.5",
+		"hardhat": "^2.22.3",
+		"svelte-chartjs": "^3.1.5"
 	}
 }
