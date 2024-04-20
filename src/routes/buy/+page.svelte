@@ -84,7 +84,7 @@
 		justify-content: center;
 		align-items: flex-start;
 		overflow-y: auto;
-		padding: 20px;
+		padding: 25px; /* pls dont edit this line -Justin */
 		gap: 20px;
 	}
 </style>
