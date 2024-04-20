@@ -7,6 +7,7 @@
 	Chart.register(...registerables);
 	import { toasts } from 'svelte-toasts';
 	import { ToastContainer, FlatToast } from 'svelte-toasts';
+	import { onMount } from 'svelte';
 
 	let questions: Question[] = [
 		{ id: 1, text: 'Is Svelte better than React?', votesYes: 10, votesNo: 5 },
@@ -65,21 +66,7 @@
 		});
 	}
 
-	async function vote(ballot_num: number, vote_val: boolean, ballot_string: string) {
-		if (window.ethereum === undefined) {
-			toast_alert('Please install MetaMask to use this feature');
-			return;
-		} else {
-			toast_info(`Voting ${vote_val} on ballot: ${ballot_string}?`);
-			const alchemyProvider = new ethers.AlchemyProvider(
-				'sepolia',
-				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
-			);
-			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
-
-			const signer = await provider.getSigner();
-
-			const abi = [
+	const abi = [
 				{
 					inputs: [],
 					stateMutability: 'nonpayable',
@@ -207,6 +194,20 @@
 				}
 			];
 
+	async function vote(ballot_num: number, vote_val: boolean, ballot_string: string) {
+		if (window.ethereum === undefined) {
+			toast_alert('Please install MetaMask to use this feature');
+			return;
+		} else {
+			toast_info(`Voting ${vote_val} on ballot: ${ballot_string}?`);
+			const alchemyProvider = new ethers.AlchemyProvider(
+				'sepolia',
+				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
+			);
+			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
+
+			const signer = await provider.getSigner();
+
 			const ballot = new ethers.Contract('0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a', abi, signer);
 
 			try {
@@ -216,6 +217,39 @@
 			}
 		}
 	}
+
+	async function proposals(id: number) {
+		if (window.ethereum === undefined) {
+			toast_alert('Please install MetaMask to use this feature');
+			return;
+		} else {
+			const alchemyProvider = new ethers.AlchemyProvider(
+				'sepolia',
+				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
+			);
+			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
+
+			const signer = await provider.getSigner();
+
+			const ballot = new ethers.Contract('0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a', abi, signer);
+
+			try {
+				const results = await ballot.proposals(0);
+				console.log(results)
+			} catch (e) {
+				console.log(e)
+				toast_alert('Cannot retreive proposals');
+			}
+		}
+	
+	}
+
+	onMount(async () => {
+		questions.forEach(async (item) => {
+			await proposals(item.id);
+		});
+		
+	});
 </script>
 
 <div class="questions-container">
