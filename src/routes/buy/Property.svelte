@@ -2,8 +2,60 @@
 	import type { Property } from './types';
 	import { ethers } from 'ethers';
 	export let property: Property;
+	import QrCode from '$components/QrCode/QrCode.svelte';
+	const qrModal = document.querySelector('.qrModal')
+	import { writable } from 'svelte/store';
+	import {
+		lndGetWalletBalance,
+		lndGetInfo,
+		lndListChannels,
+		lndListInvoices,
+		lndCreateInvoice,
+		lndNewAddress,
+		type GetInfoResponse
+	} from '$lib/lnd';
+	import { onMount } from 'svelte';
+
+	
+
+	const isModalVisible = writable(false);
+	const currInvoice = writable('')
+	const currAddress = writable('')
+	const currInfo = writable()
+
+
+	const generateQR = async (amount:number, memo:string, invoice:string, address:string)=> {
+			const getNewAddress = async () => {
+			address = (await lndNewAddress()).address;
+			currAddress.set(address)
+		};
+
+		const createInvoice = async () => {
+			let res = (await lndCreateInvoice(amount, memo)).payment_request;
+			currInvoice.set(res)
+		};
+
+		const getInfo = async () => {
+			let res = await lndGetInfo();
+			currInfo.set(res);
+		};
+
+		onMount(async () => {
+			await getInfo();
+			getNewAddress();
+			createInvoice();
+		});
+
+	}
+
+
+	function closeModal() {
+        isModalVisible.set(false);
+    }
+
 
 	async function give_vote_permissions() {
+        isModalVisible.set(true);
 		if (window.ethereum === undefined) {
 			alert('Please install MetaMask to use this feature');
 			return;
@@ -153,7 +205,10 @@
 
 			// const address = await signer.getAddress();
 
+
+
 			const tx = await RightToVote.giveRightToVote(signer.address, 1);
+			generateQR()
 		}
 	}
 </script>
@@ -170,8 +225,15 @@
 			<p><strong>Share price:</strong> ${property.shareprice}</p>
 			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
 		</div>
-		<button class="btn-buy" type="button" on:click={() => {give_vote_permissions(); location.href='/qrcode';}}>Buy Now</button>
+		<button class="btn-buy" type="button" on:click={() => {give_vote_permissions()}}>Buy Now</button>
 	</div>
+
+    {#if $isModalVisible}
+        <div class="qrModal">
+            <QrCode image='https://voltage.imgix.net/Team.png?fm=webp&w=160' address = {currAddress} invoice= {currInvoice} ></QrCode>
+            <button on:click={closeModal}>Close</button>
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -224,4 +286,16 @@
 	.btn-buy:hover {
 		background-color: #45a049;
 	}
+
+	.qrModal {
+		width: 400px;
+		height: 500px;
+		background-color: #fff;
+		position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+		
+	}
+
 </style>
