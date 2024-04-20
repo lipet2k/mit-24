@@ -10,9 +10,9 @@
 	import { onMount } from 'svelte';
 
 	let questions: Question[] = [
-		{ id: 1, text: 'Is Svelte better than React?', votesYes: 10, votesNo: 5 },
-		{ id: 2, text: 'Should we use TypeScript?', votesYes: 15, votesNo: 3 },
-		{ id: 3, text: 'Is pizza healthy?', votesYes: 5, votesNo: 12 }
+		{ id: 0, text: 'Is Svelte better than React?', votesYes: 0, votesNo: 0 },
+		{ id: 1, text: 'Should we use TypeScript?', votesYes: 0, votesNo: 0 },
+		{ id: 2, text: 'Is pizza healthy?', votesYes: 0, votesNo: 0 }
 	];
 
 	let options = {
@@ -231,11 +231,12 @@
 
 			const signer = await provider.getSigner();
 
-			const ballot = new ethers.Contract('0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a', abi, signer);
+			const ballot = new ethers.Contract('0xb1a181d26de3c95c4ec1675160c42a61f4e9045f', abi, signer);
 
 			try {
-				const results = await ballot.proposals(0);
-				console.log(results)
+				const results = await ballot.proposals(id);
+				questions[id].votesNo = Number(results[1]);
+				questions[id].votesYes = Number(results[2]);
 			} catch (e) {
 				console.log(e)
 				toast_alert('Cannot retreive proposals');

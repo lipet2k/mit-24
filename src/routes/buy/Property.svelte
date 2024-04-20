@@ -172,7 +172,7 @@
 			];
 
 			const RightToVote = new ethers.Contract(
-				'0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a',
+				'0xb1a181d26de3c95c4ec1675160c42a61f4e9045f',
 				right_to_vote_abi,
 				signer
 			);
