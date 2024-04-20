@@ -63,19 +63,28 @@
 </script>
 
 <div class="properties-container">
+	<!-- <div class="grid grid-cols-3"> -->
 	{#each properties as property}
 		<Property {property} />
 	{/each}
+	<!-- </div> -->
 </div>
 
 <style>
 	.properties-container {
-		display: grid;
+		/* display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 20px;
 		padding: 25px;
 		justify-content: center;
+		align-items: flex-start; */
+
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 		align-items: flex-start;
 		overflow-y: auto;
+		padding: 20px;
+		gap: 20px;
 	}
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Question } from './types';
+	import Button from '$components/Button/Button.svelte';
 	import { Pie } from 'svelte-chartjs';
 	import { Chart, registerables } from 'chart.js';
 	Chart.register(...registerables);
@@ -47,6 +48,10 @@
 			<div class="chart-container">
 				<Pie {options} data={getChartData(question)} />
 			</div>
+			<center>
+				<button class="btn-vote btn-yes">Yes</button>
+				<button class="btn-vote btn-no">No</button>
+			</center>
 		</div>
 	{/each}
 </div>
@@ -76,4 +81,27 @@
 	.last {
 		border-bottom: none;
 	}
+	.btn-vote {
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 16px;
+		padding: 10px 20px;
+		margin-top: 15px;
+		transition: background-color 0.3s;
+	}
+	.btn-yes {
+		background-color: #528e54;
+	}
+	.btn-yes:hover {
+		background-color: #45a049;
+	}
+	.btn-no {
+		background-color: #ef5350;
+	}
+	.btn-no:hover {
+		background-color: #d32f2f;
+	}
+
 </style>
