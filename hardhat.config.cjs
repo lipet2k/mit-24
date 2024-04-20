@@ -8,7 +8,7 @@ module.exports = {
   networks: {
     sepolia: {
       url: process.env.ALCHEMY_API_URL,
-      accounts: [process.env.PRIVASTE_KEY]
+      accounts: [process.env.PRIVATE_KEY]
     }
   }
 };

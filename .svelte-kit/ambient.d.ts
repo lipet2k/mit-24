@@ -30,6 +30,7 @@ declare module '$env/static/private' {
 	export const VITE_API_ENDPOINT: string;
 	export const ALCHEMY_API_URL: string;
 	export const PRIVATE_KEY: string;
+	export const CONTRACT_ADDRESS: string;
 	export const NEXT_PUBLIC_ADMIN_MACAROON: string;
 	export const NEXT_PUBLIC_API_ENDPOINT: string;
 	export const NVM_INC: string;
@@ -119,6 +120,7 @@ declare module '$env/dynamic/private' {
 		VITE_API_ENDPOINT: string;
 		ALCHEMY_API_URL: string;
 		PRIVATE_KEY: string;
+		CONTRACT_ADDRESS: string;
 		NEXT_PUBLIC_ADMIN_MACAROON: string;
 		NEXT_PUBLIC_API_ENDPOINT: string;
 		NVM_INC: string;
