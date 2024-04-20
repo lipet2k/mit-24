@@ -241,7 +241,6 @@
 				toast_alert('Cannot retreive proposals');
 			}
 		}
-	
 	}
 
 	onMount(async () => {

@@ -1,16 +1,14 @@
 <script lang="ts">
 	import type { Property } from './types';
-	export let isOpen = false;
+	
 	export let property: Property;
-	export function close() {
-		isOpen = false;
-	}
+
 </script>
 
-{#if isOpen}
+
 	<div class="modal">
 		<div class="modal-content">
-			<span class="close" on:click={close}>&times;</span>
+			
 			<h2>{property.name}</h2>
 			<p>{property.description}</p>
 			<p><strong>Price:</strong> ${property.totalprice}</p>
@@ -18,7 +16,7 @@
 			<p><strong>Percentage owned:</strong> {property.percentage}%</p>
 		</div>
 	</div>
-{/if}
+
 
 <style>
 	.modal {
@@ -33,7 +31,10 @@
 	}
 	.modal-content {
 		background-color: #fefefe;
-		margin: 15% auto;
+		position: fixed; /* Fixes the div's position relative to the viewport */
+		top: 50%; /* Position the top edge of the div at the middle of the viewport vertically */
+		left: 50%; /* Position the left edge of the div at the middle of the viewport horizontally */
+		transform: translate(-50%, -50%); /* Offset the div by half its width and height to center it */
 		padding: 20px;
 		border: 1px solid #888;
 		width: 80%; /* Adjust width as necessary */

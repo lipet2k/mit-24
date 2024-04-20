@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Property } from './types';
 	import { ethers } from 'ethers';
+	// import { useState } from './hooks.js';
 	export let property: Property;
 
 	function toast_alert(message: string) {
@@ -204,14 +205,30 @@
 			type="button"
 			on:click={() => {
 				give_vote_permissions();
-				location.href = '/qrcode';
+				isOpen=true;
 			}}>Buy Now</button
 		>
 	</div>
 </div>
-<Modal {isOpen} {property} close={() => (isOpen = false)} />
+
+{#if isOpen}
+<Modal {property} />
+<button class="mbtn" on:click={()=>{isOpen = false}}>x</button>
+{/if}
 
 <style>
+	.mbtn {
+		position: fixed;
+		top: 37%;
+		right:10%;
+		
+		
+		background-color: #ff0000;
+		color: #ffffff;
+		width: 25px;
+		height: 25px;
+		z-index: 9999999;
+	}
 	.property-card {
 		display: flex;
 		flex-direction: column;
