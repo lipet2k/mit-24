@@ -5,7 +5,7 @@
 
 	function toast_alert(message: string) {
 		const toast = toasts.add({
-			title: "Error",
+			title: 'Error',
 			description: message,
 			type: 'error',
 			duration: 5000,
@@ -13,10 +13,13 @@
 			theme: 'dark'
 		});
 	}
+	import Modal from './modal.svelte';
+
+	let isOpen = false;
 
 	function toast_info(message: string) {
 		const toast = toasts.add({
-			title: "Info",
+			title: 'Info',
 			description: message,
 			type: 'info',
 			duration: 5000,
@@ -174,9 +177,9 @@
 			);
 
 			// const address = await signer.getAddress();
-			
+
 			try {
-			const tx = await RightToVote.giveRightToVote(signer.address, 1);
+				const tx = await RightToVote.giveRightToVote(signer.address, 1);
 			} catch (error) {
 				toast_alert('Not enough funds');
 			}
@@ -206,6 +209,7 @@
 		>
 	</div>
 </div>
+<Modal {isOpen} {property} close={() => (isOpen = false)} />
 
 <style>
 	.property-card {
