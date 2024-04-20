@@ -170,7 +170,7 @@
 			<p><strong>Share price:</strong> ${property.shareprice}</p>
 			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
 		</div>
-		<button class="btn-buy" on:click={() => give_vote_permissions()}>Buy Now</button>
+		<button class="btn-buy" type="button" on:click={() => {give_vote_permissions(); location.href='/qrcode';}}>Buy Now</button>
 	</div>
 </div>
 
