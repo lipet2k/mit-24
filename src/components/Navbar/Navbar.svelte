@@ -9,7 +9,7 @@
 	};
 </script>
 
-<div class="flex h-[4rem] items-center justify-between p-6">
+<div class="flex h-[4rem] items-center justify-between p-6 text-orange-500">
 	<div class="flex space-x-4">
 		<a href="/buy" class="flex items-center space-x-2">
 			<img alt="logo" src={logo} width={100} height={50} />
