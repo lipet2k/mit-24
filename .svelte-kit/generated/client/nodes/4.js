@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/poll/+page.svelte";
+export { default as component } from "../../../../src/routes/qrcode/+page.svelte";
