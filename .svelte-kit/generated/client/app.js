@@ -14,7 +14,7 @@ export const server_loads = [];
 export const dictionary = {
 		"/": [~2],
 		"/buy": [3],
-		"/poll": [4],
+		"/qrcode": [4],
 		"/view": [5]
 	};
 

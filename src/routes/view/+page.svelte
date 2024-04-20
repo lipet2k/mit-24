@@ -35,9 +35,9 @@
 				{
 					label: 'Votes',
 					data: [question.votesYes, question.votesNo],
-					backgroundColor: ['rgba(75, 192, 192, 0.8)', 'rgba(255, 99, 132, 0.8)'],
-					borderColor: ['white', 'white'],
-					borderWidth: 2
+					backgroundColor: ['rgba(51, 255, 102, 1)', 'rgba(255, 0, 0, 1)'],
+					borderColor: ['black', 'black'],
+					borderWidth: 4
 				}
 			]
 		};
@@ -250,10 +250,12 @@
 	.questions-container {
 		max-width: 800px;
 		margin: auto;
+		margin-top: 40px;
 		padding: 20px;
+		border-color: black;
 		box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-		border-radius: 8px;
 		background: white;
+		border: 4px solid black;
 	}
 	.question {
 		margin-bottom: 2rem;
@@ -262,7 +264,9 @@
 	}
 	h3 {
 		font-size: 1.2rem;
-		color: #333;
+		color: black;
+		font-weight: bold;
+		text-align: center;
 		margin-bottom: 1rem;
 	}
 	.chart-container {
@@ -272,9 +276,9 @@
 		border-bottom: none;
 	}
 	.btn-vote {
-		color: white;
-		border: none;
-		border-radius: 5px;
+		color: black;
+		font-weight: bold;
+		border: black solid 4px;
 		cursor: pointer;
 		font-size: 16px;
 		padding: 10px 20px;
@@ -282,15 +286,17 @@
 		transition: background-color 0.3s;
 	}
 	.btn-yes {
-		background-color: #528e54;
+		background-color: #33ff66;
 	}
 	.btn-yes:hover {
-		background-color: #45a049;
+		background-color: black;
+		color: white;
 	}
 	.btn-no {
-		background-color: #ef5350;
+		background-color: #ff0000;
 	}
 	.btn-no:hover {
-		background-color: #d32f2f;
+		background-color: black;
+		color: white;
 	}
 </style>
