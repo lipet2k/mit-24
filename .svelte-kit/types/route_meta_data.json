@@ -3,5 +3,6 @@
 		"src/routes/+page.server.ts"
 	],
 	"/buy": [],
-	"/poll": []
+	"/poll": [],
+	"/view": []
 }
