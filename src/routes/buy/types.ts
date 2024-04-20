@@ -4,6 +4,6 @@ export interface Property {
 	description: string;
 	totalprice: string;
 	image: string;
-	percentage: string;
+	percentage: number;
 	shareprice: string;
 }

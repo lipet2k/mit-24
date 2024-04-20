@@ -59,7 +59,7 @@
 		margin: 5px 0;
 	}
 	.btn-buy {
-		background-color: #4caf50;
+		background-color: #528e54;
 		color: white;
 		border: none;
 		border-radius: 5px;

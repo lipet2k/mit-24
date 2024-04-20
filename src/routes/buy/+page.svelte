@@ -11,7 +11,7 @@
 			image:
 				'https://static.dezeen.com/uploads/2021/06/all-together-now-co-living-co-working-book-feature_dezeen_1704_col_0.jpg',
 			shareprice: '150,000',
-			percentage: '80'
+			percentage: 80
 		},
 		{
 			id: 2,
@@ -21,7 +21,7 @@
 			image:
 				'https://co-living.imgix.net/uploads/listings/18858/photos/nUHwGeGizV.jpg?auto=compress,enhance,format&fit=crop&crop=faces,center&w=720&h=480',
 			shareprice: '1,000,000',
-			percentage: '25'
+			percentage: 25
 		},
 		{
 			id: 3,
@@ -30,7 +30,7 @@
 			totalprice: '850,000',
 			image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688',
 			shareprice: '85,000',
-			percentage: '10'
+			percentage: 10
 		},
 		{
 			id: 4,
@@ -39,7 +39,7 @@
 			totalprice: '780,000',
 			image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6',
 			shareprice: '78,000',
-			percentage: '15'
+			percentage: 15
 		},
 		{
 			id: 5,
@@ -48,7 +48,7 @@
 			totalprice: '1,200,000',
 			image: 'https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62',
 			shareprice: '120,000',
-			percentage: '20'
+			percentage: 20
 		},
 		{
 			id: 6,
@@ -57,7 +57,7 @@
 			totalprice: '500,000',
 			image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb',
 			shareprice: '50,000',
-			percentage: '5'
+			percentage: 30
 		}
 	];
 </script>
