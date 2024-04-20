@@ -21,14 +21,12 @@
 	{#if menu}
 		<div class="mobile-menu active">
 			<ul class="flex flex-col space-y-4">
-				<li><a href="/poll" class="text-xl hover:underline" on:click={toggleMenu}>Poll</a></li>
 				<li><a href="/buy" class="text-xl hover:underline" on:click={toggleMenu}>Buy</a></li>
 				<li><a href="/view" class="text-xl hover:underline" on:click={toggleMenu}>View</a></li>
 			</ul>
 		</div>
 	{/if}
 	<div class="nav-links lg:block">
-		<a href="/poll" class="hover:underline">Poll</a>
 		<a href="/buy" class="hover:underline">Buy</a>
 		<a href="/view" class="hover:underline">View</a>
 	</div>
