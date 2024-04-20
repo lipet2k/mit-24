@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Property } from './types';
 	import { ethers } from 'ethers';
-	// import { useState } from './hooks.js';
+	import { toasts } from 'svelte-toasts';
 	export let property: Property;
 
 	function toast_alert(message: string) {
@@ -196,16 +196,16 @@
 		<h2 class="property-name">{property.name}</h2>
 		<p class="property-description">{property.description}</p>
 		<div class="property-price-info">
-			<p><strong>Price:</strong> {property.totalprice} BTC</p>
-			<p><strong>Share price:</strong> {property.shareprice} BTC</p>
-			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
+			<p><strong>Price:</strong> {property.totalprice} SATS</p>
+			<p><strong>Share price:</strong> {property.shareprice} SATS</p>
+			<p><strong>Percentage owned:</strong> {property.percentage}%</p>
 		</div>
 		<button
 			class="btn-buy"
 			type="button"
 			on:click={() => {
-				give_vote_permissions();
 				isOpen=true;
+				give_vote_permissions();
 			}}>Buy Now</button
 		>
 	</div>
@@ -223,8 +223,8 @@
 		right:10%;
 		
 		
-		background-color: #ff0000;
-		color: #ffffff;
+		background-color: white;
+		color: black;
 		width: 25px;
 		height: 25px;
 		z-index: 9999999;
