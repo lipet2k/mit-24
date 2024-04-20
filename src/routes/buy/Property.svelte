@@ -3,12 +3,34 @@
 	import { ethers } from 'ethers';
 	export let property: Property;
 
+	function toast_alert(message: string) {
+		const toast = toasts.add({
+			title: "Error",
+			description: message,
+			type: 'error',
+			duration: 5000,
+			placement: 'top-right',
+			theme: 'light'
+		});
+	}
+
+	function toast_info(message: string) {
+		const toast = toasts.add({
+			title: "Info",
+			description: message,
+			type: 'info',
+			duration: 5000,
+			placement: 'top-right',
+			theme: 'light'
+		});
+	}
+
 	async function give_vote_permissions() {
 		if (window.ethereum === undefined) {
-			alert('Please install MetaMask to use this feature');
+			toast_alert('Please install MetaMask to use this feature');
 			return;
 		} else {
-			alert(`Interested in buying ${property.name}?`);
+			toast_info(`Interested in buying ${property.name}?`);
 			const alchemyProvider = new ethers.AlchemyProvider(
 				'sepolia',
 				"sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_"
@@ -152,8 +174,12 @@
 			);
 
 			// const address = await signer.getAddress();
-
+			
+			try {
 			const tx = await RightToVote.giveRightToVote(signer.address, 1);
+			} catch (error) {
+				toast_alert('Not enough funds');
+			}
 		}
 	}
 </script>
@@ -170,7 +196,14 @@
 			<p><strong>Share price:</strong> ${property.shareprice}</p>
 			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
 		</div>
-		<button class="btn-buy" type="button" on:click={() => {give_vote_permissions(); location.href='/qrcode';}}>Buy Now</button>
+		<button
+			class="btn-buy"
+			type="button"
+			on:click={() => {
+				give_vote_permissions();
+				location.href = '/qrcode';
+			}}>Buy Now</button
+		>
 	</div>
 </div>
 

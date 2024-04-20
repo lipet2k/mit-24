@@ -3,7 +3,10 @@
 	import Button from '$components/Button/Button.svelte';
 	import { Pie } from 'svelte-chartjs';
 	import { Chart, registerables } from 'chart.js';
+	import { ethers } from 'ethers';
 	Chart.register(...registerables);
+	import { toasts } from 'svelte-toasts';
+	import { ToastContainer, FlatToast } from 'svelte-toasts';
 
 	let questions: Question[] = [
 		{ id: 1, text: 'Is Svelte better than React?', votesYes: 10, votesNo: 5 },
@@ -39,21 +42,208 @@
 			]
 		};
 	}
+
+	function toast_alert(message: string) {
+		const toast = toasts.add({
+			title: "Error",
+			description: message,
+			type: 'error',
+			duration: 5000,
+			placement: 'top-right',
+			theme: 'light'
+		});
+	}
+
+	function toast_info(message: string) {
+		const toast = toasts.add({
+			title: "Info",
+			description: message,
+			type: 'info',
+			duration: 5000,
+			placement: 'top-right',
+			theme: 'light'
+		});
+	}
+
+	async function vote(ballot_num: number, vote_val: boolean, ballot_string: string) {
+		if (window.ethereum === undefined) {
+			toast_alert('Please install MetaMask to use this feature');
+			return;
+		} else {
+			toast_info(`Voting ${vote_val} on ballot: ${ballot_string}?`);
+			const alchemyProvider = new ethers.AlchemyProvider(
+				'sepolia',
+				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
+			);
+			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
+
+			const signer = await provider.getSigner();
+
+			const abi = [
+				{
+					inputs: [],
+					stateMutability: 'nonpayable',
+					type: 'constructor'
+				},
+				{
+					inputs: [],
+					name: 'chairperson',
+					outputs: [
+						{
+							internalType: 'address',
+							name: '',
+							type: 'address'
+						}
+					],
+					stateMutability: 'view',
+					type: 'function'
+				},
+				{
+					inputs: [
+						{
+							internalType: 'uint256',
+							name: 'proposal',
+							type: 'uint256'
+						}
+					],
+					name: 'createProposal',
+					outputs: [],
+					stateMutability: 'nonpayable',
+					type: 'function'
+				},
+				{
+					inputs: [
+						{
+							internalType: 'address',
+							name: 'voter',
+							type: 'address'
+						},
+						{
+							internalType: 'uint256',
+							name: 'weight',
+							type: 'uint256'
+						}
+					],
+					name: 'giveRightToVote',
+					outputs: [],
+					stateMutability: 'nonpayable',
+					type: 'function'
+				},
+				{
+					inputs: [
+						{
+							internalType: 'uint256',
+							name: '',
+							type: 'uint256'
+						}
+					],
+					name: 'proposals',
+					outputs: [
+						{
+							internalType: 'uint256',
+							name: 'name',
+							type: 'uint256'
+						},
+						{
+							internalType: 'uint256',
+							name: 'voteFor',
+							type: 'uint256'
+						},
+						{
+							internalType: 'uint256',
+							name: 'voteAgainst',
+							type: 'uint256'
+						}
+					],
+					stateMutability: 'view',
+					type: 'function'
+				},
+				{
+					inputs: [
+						{
+							internalType: 'uint256',
+							name: 'proposal',
+							type: 'uint256'
+						},
+						{
+							internalType: 'bool',
+							name: 'value',
+							type: 'bool'
+						}
+					],
+					name: 'vote',
+					outputs: [],
+					stateMutability: 'nonpayable',
+					type: 'function'
+				},
+				{
+					inputs: [
+						{
+							internalType: 'address',
+							name: '',
+							type: 'address'
+						}
+					],
+					name: 'voters',
+					outputs: [
+						{
+							internalType: 'uint256',
+							name: 'weight',
+							type: 'uint256'
+						},
+						{
+							internalType: 'bool',
+							name: 'voted',
+							type: 'bool'
+						},
+						{
+							internalType: 'uint256',
+							name: 'vote',
+							type: 'uint256'
+						}
+					],
+					stateMutability: 'view',
+					type: 'function'
+				}
+			];
+
+			const ballot = new ethers.Contract('0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a', abi, signer);
+
+			try {
+				const tx = await ballot.vote(ballot_num, vote_val);
+			} catch (e) {
+				toast_alert('You have no right to vote');
+			}
+		}
+	}
 </script>
 
 <div class="questions-container">
-	{#each questions as question (question.id)}
-		<div class="question">
-			<h3>{question.text}</h3>
-			<div class="chart-container">
-				<Pie {options} data={getChartData(question)} />
+		{#each questions as question (question.id)}
+			<div class="question">
+				<h3>{question.text}</h3>
+				<div class="chart-container">
+					<Pie {options} data={getChartData(question)} />
+				</div>
+				<center>
+					<button
+						class="btn-vote btn-yes"
+						type="button"
+						on:click={() => {
+							vote(question.id, true, question.text);
+						}}>Yes</button
+					>
+					<button
+						class="btn-vote btn-no"
+						type="button"
+						on:click={() => {
+							vote(question.id, true, question.text);
+						}}>No</button
+					>
+				</center>
 			</div>
-			<center>
-				<button class="btn-vote btn-yes">Yes</button>
-				<button class="btn-vote btn-no">No</button>
-			</center>
-		</div>
-	{/each}
+		{/each}
+	
 </div>
 
 <style>
@@ -103,5 +293,4 @@
 	.btn-no:hover {
 		background-color: #d32f2f;
 	}
-
 </style>
