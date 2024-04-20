@@ -63,9 +63,11 @@
 </script>
 
 <div class="properties-container">
-	{#each properties as property}
-		<Property {property} />
-	{/each}
+	<div class="grid grid-cols-3">
+		{#each properties as property}
+			<Property {property} />
+		{/each}
+	</div>
 </div>
 
 <style>
