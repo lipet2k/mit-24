@@ -11,9 +11,9 @@
 			alert(`Interested in buying ${property.name}?`);
 			const alchemyProvider = new ethers.AlchemyProvider(
 				'sepolia',
-				"sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_"
+				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
 			);
-			let provider = new ethers.BrowserProvider(window.ethereum, "sepolia");
+			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
 
 			const signer = await provider.getSigner();
 
@@ -166,11 +166,18 @@
 		<h2 class="property-name">{property.name}</h2>
 		<p class="property-description">{property.description}</p>
 		<div class="property-price-info">
-			<p><strong>Price:</strong> ${property.totalprice}</p>
-			<p><strong>Share price:</strong> ${property.shareprice}</p>
+			<p><strong>Price:</strong> {property.totalprice} BTC</p>
+			<p><strong>Share price:</strong> {property.shareprice} BTC</p>
 			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
 		</div>
-		<button class="btn-buy" type="button" on:click={() => {give_vote_permissions(); location.href='/qrcode';}}>Buy Now</button>
+		<button
+			class="btn-buy"
+			type="button"
+			on:click={() => {
+				give_vote_permissions();
+				location.href = '/qrcode';
+			}}>Buy Now</button
+		>
 	</div>
 </div>
 
