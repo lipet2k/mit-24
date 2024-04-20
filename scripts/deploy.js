@@ -1,4 +1,4 @@
-const hre = require("hardhat");
+import hre from "hardhat";
 
 async function main() {
     const ballot = await hre.ethers.deployContract("Ballot");
