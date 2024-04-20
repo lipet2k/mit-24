@@ -50,7 +50,7 @@
 			type: 'error',
 			duration: 5000,
 			placement: 'top-right',
-			theme: 'light'
+			theme: 'dark'
 		});
 	}
 
@@ -61,7 +61,7 @@
 			type: 'info',
 			duration: 5000,
 			placement: 'top-right',
-			theme: 'light'
+			theme: 'dark'
 		});
 	}
 
