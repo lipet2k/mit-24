@@ -1,75 +1,50 @@
 <script lang="ts">
 	import type { Property } from './types';
 	import { ethers } from 'ethers';
-	export let property: Property;
 	import QrCode from '$components/QrCode/QrCode.svelte';
-	const qrModal = document.querySelector('.qrModal')
 	import { writable } from 'svelte/store';
-	import {
-		lndGetWalletBalance,
-		lndGetInfo,
-		lndListChannels,
-		lndListInvoices,
-		lndCreateInvoice,
-		lndNewAddress,
-		type GetInfoResponse
-	} from '$lib/lnd';
-	import { onMount } from 'svelte';
+	import { lndCreateInvoice, lndNewAddress, lndGetInfo, type GetInfoResponse } from '$lib/lnd';
 
-	
+	export let property: Property;
 
 	const isModalVisible = writable(false);
-	const currInvoice = writable('')
-	const currAddress = writable('')
-	const currInfo = writable()
+	const currInvoice = writable('');
+	const currAddress = writable('');
+	const currInfo = writable<GetInfoResponse | null>(null);
 
+	async function generateQR(amount: number, memo: string) {
+		try {
+			const addressResult = await lndNewAddress();
+			currAddress.set(addressResult.address);
 
-	const generateQR = async (amount:number, memo:string, invoice:string, address:string)=> {
-			const getNewAddress = async () => {
-			address = (await lndNewAddress()).address;
-			currAddress.set(address)
-		};
+			const invoiceResult = await lndCreateInvoice(amount, memo);
+			currInvoice.set(invoiceResult.payment_request);
 
-		const createInvoice = async () => {
-			let res = (await lndCreateInvoice(amount, memo)).payment_request;
-			currInvoice.set(res)
-		};
-
-		const getInfo = async () => {
-			let res = await lndGetInfo();
-			currInfo.set(res);
-		};
-
-		onMount(async () => {
-			await getInfo();
-			getNewAddress();
-			createInvoice();
-		});
-
+			const infoResult = await lndGetInfo();
+			currInfo.set(infoResult);
+		} catch (error) {
+			console.error('Error generating QR:', error);
+		}
 	}
 
-
 	function closeModal() {
-        isModalVisible.set(false);
-    }
+		isModalVisible.set(false);
+	}
 
-
-	async function give_vote_permissions() {
-        isModalVisible.set(true);
+	async function giveVotePermissions() {
+		const amount = `${property.shareprice}`; // Define the invoice amount
+		const memo = `Purchase share of ${property.name}`; // Define the memo for invoice
+		isModalVisible.set(true);
 		if (window.ethereum === undefined) {
 			alert('Please install MetaMask to use this feature');
 			return;
-		} else {
-			alert(`Interested in buying ${property.name}?`);
-			const alchemyProvider = new ethers.AlchemyProvider(
-				'sepolia',
-				"sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_"
-			);
-			let provider = new ethers.BrowserProvider(window.ethereum, "sepolia");
-
-			const signer = await provider.getSigner();
-
-			const right_to_vote_abi = [
+		}
+		alert(`Interested in buying ${property.name}?`);
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const RightToVote = new ethers.Contract(
+			'0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a',
+			[
 				{
 					inputs: [],
 					stateMutability: 'nonpayable',
@@ -195,20 +170,16 @@
 					stateMutability: 'view',
 					type: 'function'
 				}
-			];
+			],
+			signer
+		);
 
-			const RightToVote = new ethers.Contract(
-				'0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a',
-				right_to_vote_abi,
-				signer
-			);
-
-			// const address = await signer.getAddress();
-
-
-
-			const tx = await RightToVote.giveRightToVote(signer.address, 1);
-			generateQR()
+		try {
+			const voterAddress = await signer.getAddress();
+			const tx = await RightToVote.giveRightToVote(voterAddress, 1);
+			await generateQR(amount, memo);
+		} catch (error) {
+			console.error('Error in Ethereum transaction:', error);
 		}
 	}
 </script>
@@ -225,15 +196,14 @@
 			<p><strong>Share price:</strong> ${property.shareprice}</p>
 			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
 		</div>
-		<button class="btn-buy" type="button" on:click={() => {give_vote_permissions()}}>Buy Now</button>
+		<button class="btn-buy" type="button" on:click={giveVotePermissions}>Buy Now</button>
 	</div>
-
-    {#if $isModalVisible}
-        <div class="qrModal">
-            <QrCode image='https://voltage.imgix.net/Team.png?fm=webp&w=160' address = {currAddress} invoice= {currInvoice} ></QrCode>
-            <button on:click={closeModal}>Close</button>
-        </div>
-    {/if}
+	{#if $isModalVisible}
+		<div class="qrModal">
+			<QrCode address={$currAddress} invoice={$currInvoice} />
+			<button on:click={closeModal}>Close</button>
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -281,7 +251,7 @@
 		font-size: 16px;
 		padding: 10px 20px;
 		margin-top: 15px;
-		transition: background-color 0.3s;
+		transition: background-color 0.25s;
 	}
 	.btn-buy:hover {
 		background-color: #45a049;
@@ -292,10 +262,14 @@
 		height: 500px;
 		background-color: #fff;
 		position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-		
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 	}
-
 </style>
