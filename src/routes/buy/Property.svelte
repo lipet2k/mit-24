@@ -27,27 +27,27 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		border: 1px solid #e0e0e0;
-		border-radius: 12px;
+		border: 4px solid black;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		padding: 20px;
 		margin-bottom: 20px;
 		width: 100%;
 		max-width: 450px;
-		background-color: #fff;
+		background-color: #ffffff;
 	}
 	.property-image img {
 		width: 100%;
 		height: auto;
-		border-radius: 10px;
+		border: 4px solid black;
 	}
 	.property-details {
 		text-align: center;
 		padding: 15px;
 	}
 	.property-name {
-		color: #333;
-		margin-top: 15px;
+		color: black;
+		margin-bottom: 15px;
+		font-weight: bold;
 	}
 	.property-description {
 		color: #666;
@@ -59,17 +59,18 @@
 		margin: 5px 0;
 	}
 	.btn-buy {
-		background-color: #528e54;
-		color: white;
-		border: none;
-		border-radius: 5px;
+		background-color: #white;
+		color: black;
+		border: 2px solid black;
 		cursor: pointer;
 		font-size: 16px;
 		padding: 10px 20px;
 		margin-top: 15px;
 		transition: background-color 0.3s;
+		font-weight: bold;
 	}
 	.btn-buy:hover {
-		background-color: #45a049;
+		background-color: black;
+		color: white;
 	}
 </style>
