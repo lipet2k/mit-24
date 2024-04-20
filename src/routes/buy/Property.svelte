@@ -3,13 +3,18 @@
 	import { ethers } from 'ethers';
 	export let property: Property;
 
-	async function give_vote_permissions(address: string) {
+	async function give_vote_permissions() {
 		if (window.ethereum === undefined) {
 			alert('Please install MetaMask to use this feature');
 			return;
 		} else {
-			window.alert(`Interested in buying ${property.name}?`);
-			const provider = new ethers.BrowserProvider(window.ethereum);
+			alert(`Interested in buying ${property.name}?`);
+			const alchemyProvider = new ethers.AlchemyProvider(
+				'sepolia',
+				"sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_"
+			);
+			let provider = new ethers.BrowserProvider(window.ethereum, "sepolia");
+
 			const signer = await provider.getSigner();
 
 			const right_to_vote_abi = [
@@ -146,6 +151,8 @@
 				signer
 			);
 
+			// const address = await signer.getAddress();
+
 			const tx = await RightToVote.giveRightToVote(signer.address, 1);
 		}
 	}
@@ -163,7 +170,7 @@
 			<p><strong>Share price:</strong> ${property.shareprice}</p>
 			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
 		</div>
-		<button class="btn-buy" on:click={() => give_vote_permissions("123")}>Buy Now</button>
+		<button class="btn-buy" on:click={() => give_vote_permissions()}>Buy Now</button>
 	</div>
 </div>
 
