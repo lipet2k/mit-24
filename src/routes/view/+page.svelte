@@ -10,9 +10,9 @@
 	import { onMount } from 'svelte';
 
 	let questions: Question[] = [
-		{ id: 0, text: 'Is Svelte better than React?', votesYes: 0, votesNo: 0 },
-		{ id: 1, text: 'Should we use TypeScript?', votesYes: 0, votesNo: 0 },
-		{ id: 2, text: 'Is pizza healthy?', votesYes: 0, votesNo: 0 }
+		{ id: 0, text: 'Replace the roof?', votesYes: 0, votesNo: 0 },
+		{ id: 1, text: 'Buy new knife sets?', votesYes: 0, votesNo: 0 },
+		{ id: 2, text: 'Replace broken washer?', votesYes: 0, votesNo: 0 }
 	];
 
 	let options = {
