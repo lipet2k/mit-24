@@ -172,7 +172,7 @@
 			];
 
 			const RightToVote = new ethers.Contract(
-				'0xb1a181d26de3c95c4ec1675160c42a61f4e9045f',
+				'0x3b48244661Cb3b9B52030BB6b197a7108adC4E60',
 				right_to_vote_abi,
 				signer
 			);
@@ -180,9 +180,10 @@
 			// const address = await signer.getAddress();
 
 			try {
-				const tx = await RightToVote.giveRightToVote(signer.address, 1);
+				const tx = await RightToVote.giveRightToVote(signer.address, 10);
 			} catch (error) {
-				toast_alert('Not enough funds');
+				console.log(error.message)
+				toast_alert("Not enough funds to buy this property");
 			}
 		}
 	}
@@ -204,7 +205,7 @@
 			class="btn-buy"
 			type="button"
 			on:click={() => {
-				isOpen=true;
+				isOpen = true;
 				give_vote_permissions();
 			}}>Buy Now</button
 		>
@@ -212,9 +213,14 @@
 </div>
 
 {#if isOpen}
-<div class="modal" on:click={() => {isOpen=false}}>
-<Modal {property} />
-</div>
+	<div
+		class="modal"
+		on:click={() => {
+			isOpen = false;
+		}}
+	>
+		<Modal {property} />
+	</div>
 {/if}
 
 <style>

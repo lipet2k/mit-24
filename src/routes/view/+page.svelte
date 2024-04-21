@@ -208,12 +208,12 @@
 
 			const signer = await provider.getSigner();
 
-			const ballot = new ethers.Contract('0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a', abi, signer);
+			const ballot = new ethers.Contract('0x3b48244661Cb3b9B52030BB6b197a7108adC4E60', abi, signer);
 
 			try {
 				const tx = await ballot.vote(ballot_num, vote_val);
 			} catch (e) {
-				toast_alert('You have no right to vote');
+				toast_alert("Cannot vote on this proposal");
 			}
 		}
 	}
@@ -231,7 +231,7 @@
 
 			const signer = await provider.getSigner();
 
-			const ballot = new ethers.Contract('0xb1a181d26de3c95c4ec1675160c42a61f4e9045f', abi, signer);
+			const ballot = new ethers.Contract('0x3b48244661Cb3b9B52030BB6b197a7108adC4E60', abi, signer);
 
 			try {
 				const results = await ballot.proposals(id);
