@@ -31,7 +31,9 @@ async function lndFetcher<T>(
   const result = await window.fetch(url, { ...init, headers });
   const data = await result.json().catch();
   if (!result.ok) {
+    console.log(data);
     throw new Error(
+      
       data?.message || result.statusText || `${path} 😱 ${result.status}`
     );
   }
@@ -63,4 +65,8 @@ export function lndCreateInvoice(amount: number, memo: string) {
 
 export function lndNewAddress() {
   return lndFetcher<NewAddressResponse>("/v1/newaddress");
+}
+
+export function lndPayInvoice(paymentRequest: string) {
+  return lndFetcher<NewAddressResponse>(`/v2/router/send`, {"payment_request": paymentRequest, "timeout_seconds": "1000" });
 }

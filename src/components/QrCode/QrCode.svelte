@@ -6,7 +6,7 @@
 	export let address = '';
 	export let invoice = '';
 	export let image = './assets/voltage.svg';
-	export let dotsColor = '#33ff66';
+	export let dotsColor = '#05b030';
 	export let cornersDotColor = '#05b030';
 	export let cornersSquareColor = '#0b7d28';
 	export let isPolling = true;
