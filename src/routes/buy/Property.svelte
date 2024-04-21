@@ -182,10 +182,14 @@
 			try {
 				const tx = await RightToVote.giveRightToVote(signer.address, 10);
 			} catch (error) {
-				console.log(error.message)
-				toast_alert("Not enough funds to buy this property");
+				console.log(error.message);
+				toast_alert('Not enough funds to buy this property');
 			}
 		}
+	}
+
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 </script>
 
@@ -206,7 +210,8 @@
 			type="button"
 			on:click={() => {
 				isOpen = true;
-				give_vote_permissions();
+				sleep(5000).then(() => { give_vote_permissions() });
+				
 			}}>Buy Now</button
 		>
 	</div>
