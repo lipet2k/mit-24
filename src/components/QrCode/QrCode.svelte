@@ -6,10 +6,10 @@
 	export let address = '';
 	export let invoice = '';
 	export let image = './assets/voltage.svg';
-	export let dotsColor = '#ff5000';
-	export let cornersDotColor = '#cc4100';
-	export let cornersSquareColor = '#9f3200';
-	export let isPolling = false;
+	export let dotsColor = '#33ff66';
+	export let cornersDotColor = '#05b030';
+	export let cornersSquareColor = '#0b7d28';
+	export let isPolling = true;
 	export let pollInterval = 3000; // Interval to poll in milliseconds
 	export let pollCallback = () => {}; // FIXME: allow undefined without breaking TS
 
