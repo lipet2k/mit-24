@@ -17,7 +17,7 @@
 	
 	async function pollCallback() {
         pollCount += 1;
-        if (pollCount >= 20) {
+        if (pollCount >= 1000) {
         	isPolling = false;
         	paid = true;
         	const qr = document.getElementById('qr');

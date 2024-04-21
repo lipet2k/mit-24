@@ -235,8 +235,8 @@
 
 			try {
 				const results = await ballot.proposals(id);
-				questions[id].votesNo = Number(results[1]);
-				questions[id].votesYes = Number(results[2]);
+				questions[id].votesNo = Number(results[2]);
+				questions[id].votesYes = Number(results[1]);
 			} catch (e) {
 				console.log(e)
 				toast_alert('Cannot retreive proposals');
@@ -271,7 +271,7 @@
 						class="btn-vote btn-no"
 						type="button"
 						on:click={() => {
-							vote(question.id, true, question.text);
+							vote(question.id, false, question.text);
 						}}>No</button
 					>
 				</center>
