@@ -11,7 +11,7 @@
 
 <div class="mb-4 mt-12 flex h-[4rem] items-center justify-between p-6 text-black">
 	<div class="flex space-x-4">
-		<a href="/buy" class="flex items-center space-x-2">
+		<a href="/" class="flex items-center space-x-2">
 			<img alt="logo" src={logo} width={300} />
 		</a>
 	</div>

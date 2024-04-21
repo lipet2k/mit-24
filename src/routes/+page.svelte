@@ -1,159 +1,148 @@
-<script lang="ts">
-	import {
-		lndGetWalletBalance,
-		lndGetInfo,
-		lndListChannels,
-		lndListInvoices,
-		lndCreateInvoice,
-		lndNewAddress,
-		lndPayInvoice,
-		type GetInfoResponse
-	} from '$lib/lnd';
+<!-- <script>
 	import { onMount } from 'svelte';
-	import QrCode from '$components/QrCode/QrCode.svelte';
-	import Button from '$components/Button/Button.svelte';
-	import Input from '$components/Input/Input.svelte';
-	import NetworkCapsule from '../features/NetworkCapsule/NetworkCapsule.svelte';
-	import Card from '$components/Card/Card.svelte';
+	import * as THREE from 'three';
 
-	let amount = 0;
-	let memo = '';
-	let invoice = '';
-	let address = '';
-	let info: GetInfoResponse;
+	let container;
 
-	let invoiceToPay = '';
+	onMount(() => {
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(
+			60,
+			container.clientWidth / container.clientHeight,
+			0.1,
+			1000
+		);
+		const renderer = new THREE.WebGLRenderer({ alpha: true });
+		renderer.setClearColor(0x000000, 0);
+		renderer.setSize(container.clientWidth, container.clientHeight);
+		container.appendChild(renderer.domElement);
 
-	const payInvoice = async () => {
-		const result = await lndPayInvoice(invoiceToPay);
-	}
+		// Cube geometry
+		const geometry = new THREE.BoxGeometry(2, 2, 2); // Creates a cube
+		const material = new THREE.MeshPhongMaterial({ color: 0x33ff66 }); // Using MeshPhongMaterial
+		const cube = new THREE.Mesh(geometry, material);
+		scene.add(cube);
 
-	const getNewAddress = async () => {
-		address = (await lndNewAddress()).address;
-	};
+		// Lighting
+		const pointLight = new THREE.PointLight(0xffffff, 100, 100); // High intensity, wide decay
+		pointLight.position.set(5, 5, 5);
+		scene.add(pointLight);
 
-	const createInvoice = async () => {
-		invoice = (await lndCreateInvoice(amount, memo)).payment_request;
-	};
+		const ambientLight = new THREE.AmbientLight(0xff3399, 5); // Moderate intensity
+		scene.add(ambientLight);
 
-	const getInfo = async () => {
-		info = await lndGetInfo();
-	};
+		// Camera position
+		camera.position.z = 4;
 
-	onMount(async () => {
-		await getInfo();
+		// Animation function
+		const animate = function () {
+			requestAnimationFrame(animate);
+
+			// Rotation
+			cube.rotation.x += 0.001;
+			cube.rotation.y += 0.001;
+
+			renderer.render(scene, camera);
+		};
+
+		// Start animation
+		animate();
+
+		// Handle resizing
+		const onResize = () => {
+			camera.aspect = container.clientWidth / container.clientHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(container.clientWidth, container.clientHeight);
+		};
+		window.addEventListener('resize', onResize);
+
+		return () => {
+			container.removeChild(renderer.domElement);
+			window.removeEventListener('resize', onResize);
+		};
 	});
 </script>
 
-<div class="mx-8 flex flex-col items-center">
-	<div class="flex items-center gap-2">
-		<img src="/assets/voltage-name.svg" alt="Voltage" class="w-[400px]" />
-		{#if info?.chains?.length}
-			<NetworkCapsule network={info.chains[0].network} />
-		{/if}
-	</div>
-	{#if address || invoice}
-		<QrCode image='https://voltage.imgix.net/Team.png?fm=webp&w=160' {address} {invoice} />
-	{/if}
-	<div class="flex flex-col gap-8 lg:flex-row">
-		<div class="flex flex-1 flex-col gap-4">
-			<Card>
-				<div class="flex flex-col gap-8">
-					<div class="flex flex-col gap-4">
-						<h2>Create Invoice</h2>
-						<!-- Make a simple form to call the lndCreateInvoices function with the amount and memo -->
-						<form class="flex flex-col gap-2" on:submit|preventDefault={createInvoice}>
-							<Input id="amount" bind:value={amount} label="Amount" />
-							<Input id="memo" bind:value={memo} label="Memo" />
-							<Button type="submit">Create Invoice</Button>
-						</form>
-					</div>
-				</div>
-			</Card>
+<div bind:this={container} />
 
-			<Card>
-				<div class="flex flex-col gap-8">
-					<div class="flex flex-col gap-4">
-						<h2>Pay Invoice</h2>
-						<!-- Make a simple form to call the lndCreateInvoices function with the amount and memo -->
-						<form class="flex flex-col gap-2" on:submit|preventDefault={payInvoice}>
-							<Input id="PayInvoice" bind:value={invoiceToPay} label="PayInvoice" />
-							<Button type="submit">Pay Invoice</Button>
-						</form>
-					</div>
-				</div>
-			</Card>
+<style>
+	/* Container for the 3D canvas */
+	div {
+		width: 20%;
+		height: 50vh;
+		margin: auto;
+		position: relative;
+		top: 50%;
+		display: block;
+	}
 
+	body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 50vh;
+		margin: 0;
+	}
+</style> -->
 
-			<Card>
-				<div class="flex flex-col gap-4">
-					<h2>Get New Address</h2>
-					<Button type="submit" on:click={getNewAddress}>Get New Address</Button>
-				</div>
-			</Card>
-		</div>
-		<div class="max-w-1/2 flex flex-1 flex-col gap-4">
-			<Card>
-				<h2>Node Balance</h2>
-				{#await lndGetWalletBalance()}
-					<p>loading...</p>
-				{:then result}
-					<ul>
-						<li>Total Balance: {result.total_balance}</li>
-						<li>Confirmed Balance: {result.confirmed_balance}</li>
-						<li>Unconfirmed Balance: {result.unconfirmed_balance}</li>
-					</ul>
-				{:catch error}
-					<p>error: {error.message}</p>
-				{/await}
-			</Card>
-			<Card>
-				<h2>Node Info</h2>
-				{#await lndGetInfo()}
-					<p>loading...</p>
-				{:then result}
-					<ul>
-						<li>Node Alias: {result.alias}</li>
-						<li>Pubkey: {result.identity_pubkey}</li>
-						<li>Peers: {result.num_peers}</li>
-						<li>Synced to Chain: {result.synced_to_chain}</li>
-					</ul>
-				{:catch error}
-					<p>error: {error.message}</p>
-				{/await}
-			</Card>
-			<Card>
-				<h2>Channel Info</h2>
-				{#await lndListChannels()}
-					<p>loading...</p>
-				{:then result}
-					<ul>
-						<li>Number of channels: {result.channels.length}</li>
-					</ul>
-				{:catch error}
-					<p>error: {error.message}</p>
-				{/await}
-			</Card>
+<script>
+	import { onMount } from 'svelte';
+	import * as THREE from 'three';
 
-			<Card>
-				<h2>Invoices</h2>
-				{#await lndListInvoices()}
-					<p>loading...</p>
-				{:then result}
-					<ul class=" max-h-80 max-w-full overflow-y-scroll break-all">
-						<!-- catch a dispatched created invoice -->
-						{#each result.invoices as invoice}
-							<li>{invoice.add_index} - {invoice.state} {invoice.payment_request}</li>
-						{/each}
-					</ul>
-				{/await}
-			</Card>
-		</div>
-	</div>
-</div>
+	let container;
 
-<style lang="postcss">
-	h2 {
-		@apply text-2xl font-bold;
+	onMount(() => {
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(
+			75,
+			window.innerWidth / window.innerHeight,
+			0.1,
+			1000
+		);
+		const renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer.setClearColor(0x000000, 0);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		container.appendChild(renderer.domElement);
+
+		const outlineGeometry = new THREE.BoxGeometry(1.1, 1.1, 1.1);
+		const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+		const outlineCube = new THREE.Mesh(outlineGeometry, outlineMaterial);
+		outlineCube.position.z = -0.1;
+		scene.add(outlineCube);
+
+		const geometry = new THREE.BoxGeometry(1, 1, 1);
+		const material = new THREE.MeshBasicMaterial({ color: 0x33ff66 });
+		const cube = new THREE.Mesh(geometry, material);
+		scene.add(cube);
+
+		camera.position.z = 1.5;
+
+		const animate = function () {
+			requestAnimationFrame(animate);
+			cube.rotation.x += 0.001;
+			cube.rotation.y += 0.002;
+			outlineCube.rotation.x += 0.001;
+			outlineCube.rotation.y += 0.002;
+			renderer.render(scene, camera);
+		};
+
+		animate();
+
+		window.addEventListener('resize', () => {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		});
+	});
+</script>
+
+<div bind:this={container} />
+
+<style>
+	div {
+		width: 100%;
+		height: 100vh;
+		display: block;
+		overflow: hidden;
 	}
 </style>
