@@ -11,7 +11,23 @@
 	export let cornersSquareColor = '#0b7d28';
 	export let isPolling = true;
 	export let pollInterval = 3000; // Interval to poll in milliseconds
-	export let pollCallback = () => {}; // FIXME: allow undefined without breaking TS
+	
+	let pollCount = 0;
+	let paid = false;
+	
+	async function pollCallback() {
+        pollCount += 1;
+        if (pollCount >= 5) {
+        	isPolling = false;
+        	paid = true;
+        	const qr = document.getElementById('qr');
+
+			if (qr) {
+				// @ts-ignore
+				qr.setAttribute('is-polling', false);
+		  	}
+	    }
+    }
 
 	onMount(() => {
 		defineCustomElements();
