@@ -32,27 +32,26 @@
 	onMount(async () => {
 		await getInfo().then(async () => {
 			await createInvoice(Math.ceil(Number(property.shareprice)), property.name);
+		});
 	});
-		
-	});
-
 </script>
 
-
-	<div class="modal">
-		<div class="modal-content">
-			
+<div class="modal">
+	<div class="modal-content">
+		<div class="">
 			<h2>{property.name}</h2>
 			<p>{property.description}</p>
 			<p><strong>Price:</strong> {property.totalprice} SATS</p>
 			<p><strong>Share price:</strong> {property.shareprice} SATS</p>
 			<p><strong>Percentage owned:</strong> {property.percentage}%</p>
-			{#if address || invoice}
-			<QrCode image='https://voltage.imgix.net/Team.png?fm=webp&w=160' {address} {invoice} />
-			{/if}
 		</div>
+		<div class="flex flex-col items-center justify-center">
+		{#if address || invoice}
+			<QrCode image="https://voltage.imgix.net/Team.png?fm=webp&w=160" {address} {invoice} />
+		{/if}
 	</div>
-
+	</div>
+</div>
 
 <style>
 	.modal {
@@ -67,10 +66,10 @@
 	}
 	.modal-content {
 		background-color: #fefefe;
-		position: fixed; 
-		top: 50%; 
-		left: 50%; 
-		transform: translate(-50%, -50%); 
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 		padding: 20px;
 		border: 1px solid #888;
 		width: 80%;
