@@ -6,6 +6,7 @@
 		lndListInvoices,
 		lndCreateInvoice,
 		lndNewAddress,
+		lndPayInvoice,
 		type GetInfoResponse
 	} from '$lib/lnd';
 	import { onMount } from 'svelte';
@@ -20,6 +21,12 @@
 	let invoice = '';
 	let address = '';
 	let info: GetInfoResponse;
+
+	let invoiceToPay = '';
+
+	const payInvoice = async () => {
+		const result = await lndPayInvoice(invoiceToPay);
+	}
 
 	const getNewAddress = async () => {
 		address = (await lndNewAddress()).address;
@@ -45,9 +52,7 @@
 			<NetworkCapsule network={info.chains[0].network} />
 		{/if}
 	</div>
-	<!-- TODO: voltage documentation -->
 	{#if address || invoice}
-		<!-- TODO: check if payment succeeded -->
 		<QrCode image='https://voltage.imgix.net/Team.png?fm=webp&w=160' {address} {invoice} />
 	{/if}
 	<div class="flex flex-col gap-8 lg:flex-row">
@@ -65,6 +70,21 @@
 					</div>
 				</div>
 			</Card>
+
+			<Card>
+				<div class="flex flex-col gap-8">
+					<div class="flex flex-col gap-4">
+						<h2>Pay Invoice</h2>
+						<!-- Make a simple form to call the lndCreateInvoices function with the amount and memo -->
+						<form class="flex flex-col gap-2" on:submit|preventDefault={payInvoice}>
+							<Input id="PayInvoice" bind:value={invoiceToPay} label="PayInvoice" />
+							<Button type="submit">Pay Invoice</Button>
+						</form>
+					</div>
+				</div>
+			</Card>
+
+
 			<Card>
 				<div class="flex flex-col gap-4">
 					<h2>Get New Address</h2>

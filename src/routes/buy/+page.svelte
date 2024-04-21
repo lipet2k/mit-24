@@ -7,11 +7,11 @@
 			id: 1,
 			name: 'Beachfront Villa',
 			description: 'Beautiful scenery with a beachfront view.',
-			totalprice: '23.17',
+			totalprice: '2.31',
 			image:
 				'https://static.dezeen.com/uploads/2021/06/all-together-now-co-living-co-working-book-feature_dezeen_1704_col_0.jpg',
-			shareprice: '2.317',
-			percentage: 10
+			shareprice: '2.31',
+			percentage: 100
 		},
 		{
 			id: 2,
