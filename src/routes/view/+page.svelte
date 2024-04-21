@@ -7,11 +7,12 @@
 	Chart.register(...registerables);
 	import { toasts } from 'svelte-toasts';
 	import { ToastContainer, FlatToast } from 'svelte-toasts';
+	import { onMount } from 'svelte';
 
 	let questions: Question[] = [
-		{ id: 1, text: 'Is Svelte better than React?', votesYes: 10, votesNo: 5 },
-		{ id: 2, text: 'Should we use TypeScript?', votesYes: 15, votesNo: 3 },
-		{ id: 3, text: 'Is pizza healthy?', votesYes: 5, votesNo: 12 }
+		{ id: 0, text: 'Replace the roof?', votesYes: 0, votesNo: 0 },
+		{ id: 1, text: 'Buy new knife sets?', votesYes: 0, votesNo: 0 },
+		{ id: 2, text: 'Replace broken washer?', votesYes: 0, votesNo: 0 }
 	];
 
 	let options = {
@@ -50,7 +51,7 @@
 			type: 'error',
 			duration: 5000,
 			placement: 'top-right',
-			theme: 'light'
+			theme: 'dark'
 		});
 	}
 
@@ -61,25 +62,11 @@
 			type: 'info',
 			duration: 5000,
 			placement: 'top-right',
-			theme: 'light'
+			theme: 'dark'
 		});
 	}
 
-	async function vote(ballot_num: number, vote_val: boolean, ballot_string: string) {
-		if (window.ethereum === undefined) {
-			toast_alert('Please install MetaMask to use this feature');
-			return;
-		} else {
-			toast_info(`Voting ${vote_val} on ballot: ${ballot_string}?`);
-			const alchemyProvider = new ethers.AlchemyProvider(
-				'sepolia',
-				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
-			);
-			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
-
-			const signer = await provider.getSigner();
-
-			const abi = [
+	const abi = [
 				{
 					inputs: [],
 					stateMutability: 'nonpayable',
@@ -207,15 +194,62 @@
 				}
 			];
 
-			const ballot = new ethers.Contract('0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a', abi, signer);
+	async function vote(ballot_num: number, vote_val: boolean, ballot_string: string) {
+		if (window.ethereum === undefined) {
+			toast_alert('Please install MetaMask to use this feature');
+			return;
+		} else {
+			toast_info(`Voting ${vote_val} on ballot: ${ballot_string}?`);
+			const alchemyProvider = new ethers.AlchemyProvider(
+				'sepolia',
+				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
+			);
+			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
+
+			const signer = await provider.getSigner();
+
+			const ballot = new ethers.Contract('0x3b48244661Cb3b9B52030BB6b197a7108adC4E60', abi, signer);
 
 			try {
 				const tx = await ballot.vote(ballot_num, vote_val);
 			} catch (e) {
-				toast_alert('You have no right to vote');
+				toast_alert("Cannot vote on this proposal");
 			}
 		}
 	}
+
+	async function proposals(id: number) {
+		if (window.ethereum === undefined) {
+			toast_alert('Please install MetaMask to use this feature');
+			return;
+		} else {
+			const alchemyProvider = new ethers.AlchemyProvider(
+				'sepolia',
+				'sTiCW6iWtoi5oky1Ee0M6STCtaAlWnA_'
+			);
+			let provider = new ethers.BrowserProvider(window.ethereum, 'sepolia');
+
+			const signer = await provider.getSigner();
+
+			const ballot = new ethers.Contract('0x3b48244661Cb3b9B52030BB6b197a7108adC4E60', abi, signer);
+
+			try {
+				const results = await ballot.proposals(id);
+				questions[id].votesNo = Number(results[1]);
+				questions[id].votesYes = Number(results[2]);
+			} catch (e) {
+				console.log(e)
+				toast_alert('Cannot retreive proposals');
+			}
+		}
+	}
+
+	onMount(async () => {
+		questions.forEach(async (item) => {
+			await proposals(item.id);
+		});
+		
+	});
 </script>
 
 <div class="questions-container">

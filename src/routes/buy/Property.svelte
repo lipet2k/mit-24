@@ -1,27 +1,31 @@
 <script lang="ts">
 	import type { Property } from './types';
 	import { ethers } from 'ethers';
+	import { toasts } from 'svelte-toasts';
 	export let property: Property;
 
 	function toast_alert(message: string) {
 		const toast = toasts.add({
-			title: "Error",
+			title: 'Error',
 			description: message,
 			type: 'error',
 			duration: 5000,
 			placement: 'top-right',
-			theme: 'light'
+			theme: 'dark'
 		});
 	}
+	import Modal from './modal.svelte';
+
+	let isOpen = false;
 
 	function toast_info(message: string) {
 		const toast = toasts.add({
-			title: "Info",
+			title: 'Info',
 			description: message,
 			type: 'info',
 			duration: 5000,
 			placement: 'top-right',
-			theme: 'light'
+			theme: 'dark'
 		});
 	}
 
@@ -168,17 +172,18 @@
 			];
 
 			const RightToVote = new ethers.Contract(
-				'0xDaC396b0B5E4c56169B4b492606CC2dDd7D6d42a',
+				'0x3b48244661Cb3b9B52030BB6b197a7108adC4E60',
 				right_to_vote_abi,
 				signer
 			);
 
 			// const address = await signer.getAddress();
-			
+
 			try {
-			const tx = await RightToVote.giveRightToVote(signer.address, 1);
+				const tx = await RightToVote.giveRightToVote(signer.address, 10);
 			} catch (error) {
-				toast_alert('Not enough funds');
+				console.log(error.message)
+				toast_alert("Not enough funds to buy this property");
 			}
 		}
 	}
@@ -192,22 +197,43 @@
 		<h2 class="property-name">{property.name}</h2>
 		<p class="property-description">{property.description}</p>
 		<div class="property-price-info">
-			<p><strong>Price:</strong> {property.totalprice} BTC</p>
-			<p><strong>Share price:</strong> {property.shareprice} BTC</p>
-			<p><strong>Percentage owned:</strong> ${property.percentage}%</p>
+			<p><strong>Price:</strong> {property.totalprice} SATS</p>
+			<p><strong>Share price:</strong> {property.shareprice} SATS</p>
+			<p><strong>Percentage owned:</strong> {property.percentage}%</p>
 		</div>
 		<button
 			class="btn-buy"
 			type="button"
 			on:click={() => {
+				isOpen = true;
 				give_vote_permissions();
-				location.href = '/qrcode';
 			}}>Buy Now</button
 		>
 	</div>
 </div>
 
+{#if isOpen}
+	<div
+		class="modal"
+		on:click={() => {
+			isOpen = false;
+		}}
+	>
+		<Modal {property} />
+	</div>
+{/if}
+
 <style>
+	.modal {
+		position: fixed;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
 	.property-card {
 		display: flex;
 		flex-direction: column;
