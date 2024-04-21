@@ -36,34 +36,22 @@
 	});
 </script>
 
-<div class="modal">
-	<div class="modal-content">
-		<div class="">
-			<h2>{property.name}</h2>
-			<p>{property.description}</p>
-			<p><strong>Price:</strong> {property.totalprice} SATS</p>
-			<p><strong>Share price:</strong> {property.shareprice} SATS</p>
-			<p><strong>Percentage owned:</strong> {property.percentage}%</p>
-		</div>
-		<div class="flex flex-col items-center justify-center">
-		{#if address || invoice}
-			<QrCode image="https://voltage.imgix.net/Team.png?fm=webp&w=160" {address} {invoice} />
-		{/if}
+<div class="modal-content">
+	<div class="">
+		<h2>{property.name}</h2>
+		<p>{property.description}</p>
+		<p><strong>Price:</strong> {property.totalprice} SATS</p>
+		<p><strong>Share price:</strong> {property.shareprice} SATS</p>
+		<p><strong>Percentage owned:</strong> {property.percentage}%</p>
 	</div>
-	</div>
+	<div class="flex flex-col items-center justify-center">
+	{#if address || invoice}
+		<QrCode image="https://voltage.imgix.net/Team.png?fm=webp&w=160" {address} {invoice} />
+	{/if}
+</div>
 </div>
 
 <style>
-	.modal {
-		position: fixed;
-		z-index: 1;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		background-color: rgba(0, 0, 0, 0.4);
-	}
 	.modal-content {
 		background-color: #fefefe;
 		position: fixed;

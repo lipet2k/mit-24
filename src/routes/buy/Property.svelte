@@ -212,22 +212,21 @@
 </div>
 
 {#if isOpen}
+<div class="modal" on:click={() => {isOpen=false}}>
 <Modal {property} />
-<button class="mbtn" on:click={()=>{isOpen = false}}>x</button>
+</div>
 {/if}
 
 <style>
-	.mbtn {
+	.modal {
 		position: fixed;
-		top: 37%;
-		right:10%;
-		
-		
-		background-color: white;
-		color: black;
-		width: 25px;
-		height: 25px;
-		z-index: 9999999;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		background-color: rgba(0, 0, 0, 0.4);
 	}
 	.property-card {
 		display: flex;
